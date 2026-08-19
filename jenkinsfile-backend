@@ -59,16 +59,16 @@ pipeline {
             }
         }
 
-        // stage('Docker Build') {
-        //     steps {
-        //         dir('backend') {
-        //             sh '''
-        //                 docker build -t backend:${BUILD_NUMBER} .
-        //                 docker images
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Docker Build') {
+            steps {
+                dir('backend') {
+                    sh '''
+                        docker build -t backend:${BUILD_NUMBER} .
+                        docker images
+                    '''
+                }
+            }
+        }
 
         // stage('Push To ECR') {
         //     steps {
