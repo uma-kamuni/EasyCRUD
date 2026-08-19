@@ -41,15 +41,15 @@ pipeline {
             }
         }
 
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         dir('backend') {
-        //             withSonarQubeEnv('sonar') {
-        //                 sh 'mvn sonar:sonar'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('backend') {
+                    withSonarQubeEnv('sonar') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+        }
 
         // stage('Quality Gates') {
         //     steps {
