@@ -7,10 +7,10 @@ pipeline {
         maven 'maven'
     }
 
-    // environment {
-    //     my_aws_cred = credentials('aws-access')
-    //     ECR_REPO = '876358614994.dkr.ecr.eu-north-1.amazonaws.com/backend'
-    // }
+    environment {
+        my_aws_cred = credentials('aws-access')
+        // ECR_REPO = '876358614994.dkr.ecr.eu-north-1.amazonaws.com/backend'
+    }
 
     stages {
         stage('Checkout'){
@@ -32,14 +32,14 @@ pipeline {
             }
         }
 
-        // stage('Artifact to S3') {
-        //     steps {
-        //         sh '''
-        //             sudo snap install aws-cli --classic
-        //             aws s3 cp backend/target/*.jar s3://umak.online/Artifact/student.war
-        //         '''
-        //     }
-        // }
+        stage('Artifact to S3') {
+            steps {
+                sh '''
+                    sudo snap install aws-cli --classic
+                    aws s3 cp backend/target/*.jar s3://umak.online/Artifact/student.war
+                '''
+            }
+        }
 
         // stage('SonarQube Analysis') {
         //     steps {
