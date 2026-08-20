@@ -137,11 +137,12 @@ pipeline {
                 '''
             }
         }
+        
+    }
 
-        post {
+    post {
         success {
             cleanWs()
         }
-    }
     }
 }
