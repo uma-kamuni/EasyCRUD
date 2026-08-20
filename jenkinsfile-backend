@@ -70,15 +70,15 @@ pipeline {
             }
         }
 
-        // stage('Push To ECR') {
-        //     steps {
-        //         sh '''
-        //             aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 525382241025.dkr.ecr.us-west-2.amazonaws.com
-        //             docker tag backend:${BUILD_NUMBER} ${ECR_REPO}:${BUILD_NUMBER}
-        //             docker push ${ECR_REPO}:${BUILD_NUMBER}
-        //         '''
-        //     }
-        // }
+        stage('Push To ECR') {
+            steps {
+                sh '''
+                    aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 525382241025.dkr.ecr.us-west-2.amazonaws.com
+                    docker tag backend:${BUILD_NUMBER} ${ECR_REPO}:${BUILD_NUMBER}
+                    docker push ${ECR_REPO}:${BUILD_NUMBER}
+                '''
+            }
+        }
 
         // stage('Update Manifest') {
         //     steps {
