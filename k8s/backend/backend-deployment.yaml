@@ -21,7 +21,7 @@ spec:
     spec: 
       containers: 
       - name: nginx-cont
-        image: 876358614994.dkr.ecr.eu-north-1.amazonaws.com/backend:28
+        image: 876358614994.dkr.ecr.eu-north-1.amazonaws.com/backend:29
         ports:
           - containerPort: 8080
         
