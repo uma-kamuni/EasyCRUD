@@ -88,7 +88,7 @@ pipeline {
             }
         }
 
-        stage("Push change to GITHUB"){
+        stage("Push changes to GITHUB"){
             steps {
 
                 withCredentials([
