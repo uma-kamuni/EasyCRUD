@@ -88,49 +88,6 @@ pipeline {
             }
         }
 
-        stage('Email Notification') {
-            steps {
-                emailext(
-                    subject: "SUCCESS: Docker Image Pushed to ECR - Build #${BUILD_NUMBER}",
-
-                    body: """
-Hello Team,
-
-Docker image has been successfully built, scanned and pushed to AWS ECR.
-
-Project:
-EasyCRUD
-
-Build Number:
-${BUILD_NUMBER}
-
-ECR Repository:
-${ECR_REPO}
-
-Image Tag:
-${BUILD_NUMBER}
-
-Full Docker Image:
-${ECR_REPO}:${BUILD_NUMBER}
-
-Trivy Scan:
-HIGH/CRITICAL vulnerabilities scanned
-
-Jenkins Job:
-${JOB_NAME}
-
-Build URL:
-${BUILD_URL}
-
-Regards,
-Jenkins
-                    """,
-
-                    to: 'kamuniumaramesh@gmail.com'
-                )
-            }
-        }
-
         stage('Update Manifest') {
             steps {
                 sh '''
