@@ -35,6 +35,7 @@ pipeline {
         stage('Artifact to S3') {
             steps {
                 sh '''
+                    snap install aws-cli --classic
                     aws s3 cp backend/target/*.jar s3://umak.online/Artifact/student.war
                 '''
             }
