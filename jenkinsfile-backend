@@ -133,6 +133,9 @@ pipeline {
                     aws sts get-caller-identity
                     aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
                     kubectl get nodes
+                    kubectl apply -f argocd/backend-application.yaml
+                    kubectl get pods -n argo
+                    kubectl get application -n argocd
                 '''
             }
         }
