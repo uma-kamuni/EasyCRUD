@@ -86,6 +86,39 @@ pipeline {
         //     }
         // }
 
+        stage('Email Notification') {
+    steps {
+        emailext(
+            to: 'kamuniumaramesh@gmail.com',
+            subject: "SUCCESS: ECR Image Pushed - Build #${BUILD_NUMBER}",
+            body: """
+Hello Uma,
+
+Docker image has been successfully pushed to ECR.
+
+Project: EasyCRUD
+
+Build Number:
+${BUILD_NUMBER}
+
+Image:
+${ECR_REPO}:${BUILD_NUMBER}
+
+Jenkins Job:
+${JOB_NAME}
+
+Build URL:
+${BUILD_URL}
+
+Regards,
+Jenkins
+"""
+        )
+    }
+}
+
+
+
         stage('Push To ECR') {
             steps {
                 sh '''
