@@ -137,5 +137,11 @@ pipeline {
                 '''
             }
         }
+
+        post {
+        success {
+            cleanWs()
+        }
+    }
     }
 }
