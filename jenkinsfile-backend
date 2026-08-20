@@ -92,13 +92,17 @@ pipeline {
             steps {
                 emailext(
                     subject: "SUCCESS: Docker Image Pushed to ECR - Build #${BUILD_NUMBER}",
+
                     body: """
 Hello Team,
 
 Docker image has been successfully built, scanned and pushed to AWS ECR.
 
-Project: EasyCRUD
-Build Number: ${BUILD_NUMBER}
+Project:
+EasyCRUD
+
+Build Number:
+${BUILD_NUMBER}
 
 ECR Repository:
 ${ECR_REPO}
@@ -121,6 +125,7 @@ ${BUILD_URL}
 Regards,
 Jenkins
                     """,
+
                     to: 'kamuniumaramesh@gmail.com'
                 )
             }
@@ -155,11 +160,6 @@ Jenkins
                     '''
                 }
             }
-        }
-    }
-    post {
-        success {
-            cleanWs()
         }
     }
 }
