@@ -78,6 +78,14 @@ pipeline {
             }
         }
 
+        // stage('Approval') {
+        //     steps {
+        //         timeout(time: 30, unit: 'MINUTES') {
+        //             input message: 'Approve deployment to Kubernetes?', ok: 'Approve'
+        //         }
+        //     }
+        // }
+
         stage('Push To ECR') {
             steps {
                 sh '''
@@ -116,6 +124,17 @@ pipeline {
                         git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/uma-kamuni/EasyCRUD.git HEAD:main
                     '''
                 }
+            }
+        }
+
+        stage('Argocd Deployment') {
+            steps {
+                sh '''
+                    sudo aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
+                    sudo kubectl apply -f argocd/backend-application.yaml
+                    sudo kubectl get pods -n argocd
+                    sudo kubectl get application -n argocd
+                '''
             }
         }
     }
