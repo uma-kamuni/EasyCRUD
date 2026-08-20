@@ -130,10 +130,9 @@ pipeline {
         stage('Argocd Deployment') {
             steps {
                 sh '''
-                    sudo aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
-                    sudo kubectl apply -f argocd/backend-application.yaml
-                    sudo kubectl get pods -n argo
-                    sudo kubectl get application -n argocd
+                    aws sts get-caller-identity
+                    aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
+                    kubectl get nodes
                 '''
             }
         }
