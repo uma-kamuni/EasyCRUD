@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         MY_AWS_CRED = credentials('aws-access')
-        // ECR_REPO = "876358614994.dkr.ecr.eu-north-1.amazonaws.com/frontend"
+        ECR_REPO = "876358614994.dkr.ecr.eu-north-1.amazonaws.com/frontend"
     }
 
     stages {
