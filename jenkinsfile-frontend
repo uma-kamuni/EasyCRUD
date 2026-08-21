@@ -109,15 +109,15 @@ pipeline {
             }
         }
         
-        // stage('Update Argocd deployment') {
-        //     steps {
-        //         sh '''
-        //             sudo aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
-        //             sudo kubectl apply -f argocd/frontend-application.yaml
-        //             sudo kubectl get application -n argocd
-        //         '''
-        //     }
-        // }
+        stage('Update Argocd deployment') {
+            steps {
+                sh '''
+                    sudo aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
+                    sudo kubectl apply -f argocd/frontend-application.yaml
+                    sudo kubectl get application -n argocd
+                '''
+            }
+        }
     }
 
     post {
