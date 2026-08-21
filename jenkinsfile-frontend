@@ -5,7 +5,7 @@ pipeline {
 
     environment {
         MY_AWS_CRED = credentials('aws-access')
-        ECR_REPO = "876358614994.dkr.ecr.eu-north-1.amazonaws.com/frontend"
+        // ECR_REPO = "876358614994.dkr.ecr.eu-north-1.amazonaws.com/frontend"
     }
 
     stages {
@@ -40,83 +40,84 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                dir('frontend') {
-                    sh '''
-                    docker rmi -f $(docker images -q)
-                    docker build -t frontend:${BUILD_NUMBER} .
-                    docker images
-                    '''
-                }
-            }
-        }
-
-        stage('Trivy Image scanning') {
-            steps {
-                sh '''
-                    trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 0 frontend:${BUILD_NUMBER}
-                '''
-            }
-        }
-
-        // stage('Approval') {
+        // stage('Docker Build') {
         //     steps {
-        //         timeout(time: 30 , unit: "MINUTES") {
-        //             input message: 'Deployment to kubernetes?', ok: 'Approve'
+        //         dir('frontend') {
+        //             sh '''
+        //             docker rmi -f $(docker images -q)
+        //             docker build -t frontend:${BUILD_NUMBER} .
+        //             docker images
+        //             '''
         //         }
         //     }
         // }
 
-        stage('Push To ECR') {
-            steps {
-                sh '''
-                    aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 876358614994.dkr.ecr.eu-north-1.amazonaws.com
-                    docker tag frontend:${BUILD_NUMBER} ${ECR_REPO}:${BUILD_NUMBER}
-                    docker push ${ECR_REPO}:${BUILD_NUMBER}
-                '''
-            }
-        }
+        // stage('Trivy Image scanning') {
+        //     steps {
+        //         sh '''
+        //             trivy image --scanners vuln --severity HIGH,CRITICAL --exit-code 0 frontend:${BUILD_NUMBER}
+        //         '''
+        //     }
+        // }
 
-        stage('Update Manifest') {
-            steps {
-                sh '''
-                    sed -i "s|image: .*|image: ${ECR_REPO}:${BUILD_NUMBER}|" k8s/frontend/frontend-deployment.yaml
-                '''
-            }
-        }
+        // // stage('Approval') {
+        // //     steps {
+        // //         timeout(time: 30 , unit: "MINUTES") {
+        // //             input message: 'Deployment to kubernetes?', ok: 'Approve'
+        // //         }
+        // //     }
+        // // }
 
-        stage("Push change to GITHUB"){
-            steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: "github-cred",
-                        usernameVariable: "GIT_USERNAME",
-                        passwordVariable: "GIT_PASSWORD"
-                    )
-                ]) {
+        // stage('Push To ECR') {
+        //     steps {
+        //         sh '''
+        //             aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 876358614994.dkr.ecr.eu-north-1.amazonaws.com
+        //             docker tag frontend:${BUILD_NUMBER} ${ECR_REPO}:${BUILD_NUMBER}
+        //             docker push ${ECR_REPO}:${BUILD_NUMBER}
+        //         '''
+        //     }
+        // }
 
-                    sh '''
-                        git config user.name "mayurpandit25"
-                        git config user.email "panditmayur888@gmail.com"
+        // stage('Update Manifest') {
+        //     steps {
+        //         sh '''
+        //             sed -i "s|image: .*|image: ${ECR_REPO}:${BUILD_NUMBER}|" k8s/frontend/frontend-deployment.yaml
+        //         '''
+        //     }
+        // }
 
-                        git add k8s/frontend/frontend-deployment.yaml
-                        git commit -m "Update frontend-deployment"
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/mayurpandit25/EasyCRUD.git HEAD:main
-                    '''
-                }
-            }
-        }
+        // stage("Push changes to GITHUB"){
+        //     steps {
+
+        //         withCredentials([
+        //             usernamePassword(
+        //                 credentialsId: "github-cred",
+        //                 usernameVariable: "GIT_USERNAME",
+        //                 passwordVariable: "GIT_PASSWORD"
+        //             )
+        //         ]) {
+
+        //             sh '''
+        //                 git config user.name "uma-kamuni"
+        //                 git config user.email "kamuniumaramesh@gmail.com"
+
+        //                 git add k8s/backend/backend-deployment.yaml
+        //                 git commit -m "Update backend-deployment"
+        //                 git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/uma-kamuni/EasyCRUD.git HEAD:main
+        //             '''
+        //         }
+        //     }
+        // }
         
-        stage('Update Argocd deployment') {
-            steps {
-                sh '''
-                    sudo aws eks update-kubeconfig --name my-eks-cluster1 --region us-west-2
-                    sudo kubectl apply -f argocd/frontend-application.yaml
-                    sudo kubectl get application -n argocd
-                '''
-            }
-        }
+        // stage('Update Argocd deployment') {
+        //     steps {
+        //         sh '''
+        //             sudo aws eks update-kubeconfig --name my-eks-cluster1 --region eu-north-1
+        //             sudo kubectl apply -f argocd/frontend-application.yaml
+        //             sudo kubectl get application -n argocd
+        //         '''
+        //     }
+        // }
     }
 
     post {
