@@ -40,17 +40,17 @@ pipeline {
             }
         }
 
-        // stage('Docker Build') {
-        //     steps {
-        //         dir('frontend') {
-        //             sh '''
-        //             docker rmi -f $(docker images -q)
-        //             docker build -t frontend:${BUILD_NUMBER} .
-        //             docker images
-        //             '''
-        //         }
-        //     }
-        // }
+        stage('Docker Build') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                    docker rmi -f $(docker images -q)
+                    docker build -t frontend:${BUILD_NUMBER} .
+                    docker images
+                    '''
+                }
+            }
+        }
 
         // stage('Trivy Image scanning') {
         //     steps {
